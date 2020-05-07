@@ -46,7 +46,7 @@ start: build ## Start docker container
 
 start-gpu: build-gpu ## Start docker container
 	echo "Starting container ${IMAGE_NAME}"
-	docker run --runtime nvidia --rm -it -v ${FOLDER}:/work -w /work -p ${PORT}:${PORT} -e "JUPYTER_PORT=${PORT}" ${IMAGE_NAME}
+	docker run --gpus all --rm -it -v ${FOLDER}:/work -w /work -p ${PORT}:${PORT} -e "JUPYTER_PORT=${PORT}" ${IMAGE_NAME}
 .PHONY: start-gpu
 
 install: build ## Install dependencies
@@ -58,7 +58,7 @@ lint: ## Check lint
 .PHONY: lint
 
 notebook: ## Start the Jupyter notebook
-	poetry run jupyter notebook --allow-root --ip 0.0.0.0 --port ${PORT} --no-browser --notebook-dir .
+	poetry run jupyter notebook --allow-root --ip 0.0.0.0 --port ${PORT} --no-browser --notebook-dir . --NotebookApp.token=''
 .PHONY: notebook
 
 root_bash: ## Start a root bash inside the container
